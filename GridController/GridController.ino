@@ -1,35 +1,31 @@
 #include <Adafruit_NeoTrellis.h>
+// #include <MIDI.h>
 
 
 const byte MIDDLE_C = 0x3c;
+const byte CHANNEL  = 0x00;
+const byte NOTE_ON  = 0x90;
+const byte NOTE_OFF = 0x80;
 
+#define INT_PIN 10 //pin number for trellis interrupt
 
 #define Y_DIM 8 //number of rows of key
 #define X_DIM 8 //number of columns of keys
 
-//create a matrix of trellis panels
+// create a matrix of trellis panels
 // WARNING ADDRESS OF TRELLIS GOT MESSED UP
 Adafruit_NeoTrellis t_array[Y_DIM/4][X_DIM/4] = {
 	{ Adafruit_NeoTrellis(0x2f), Adafruit_NeoTrellis(0x2e) },
 	{ Adafruit_NeoTrellis(0x32), Adafruit_NeoTrellis(0x30) }
 };
 
-//pass this matrix to the multitrellis object
+// pass this matrix to the multitrellis object
 Adafruit_MultiTrellis trellis((Adafruit_NeoTrellis *)t_array, Y_DIM/4, X_DIM/4);
 
-void noteOn(int cmd, int pitch, int velocity) {
+void sendMIDIMessage(int cmd, int pitch, int velocity) {
 	Serial.write(cmd);
 	Serial.write(pitch);
 	Serial.write(velocity);
-}
-
-void playNotes(int status,int note){
-	if(status){
-	    noteOn(0x90, MIDDLE_C, 0x45);
-	}
-	else{
-	    noteOn(0x90, MIDDLE_C, 0x00);
-	}
 }
 
 // Input a value 0 to 255 to get a color value.
@@ -52,24 +48,23 @@ TrellisCallback keyPress(keyEvent evt){
 
 	if(evt.bit.EDGE == SEESAW_KEYPAD_EDGE_RISING){
 		trellis.setPixelColor(evt.bit.NUM, Wheel(map(evt.bit.NUM, 0, X_DIM*Y_DIM, 0, 255))); //on rising
-		playNotes(true, evt.bit.NUM);
+		sendMIDIMessage(NOTE_ON, MIDDLE_C + evt.bit.NUM, 0x45);
 	}
 	else if(evt.bit.EDGE == SEESAW_KEYPAD_EDGE_FALLING){
 		trellis.setPixelColor(evt.bit.NUM, 0); //off falling
-		playNotes(false, evt.bit.NUM);
+		sendMIDIMessage(NOTE_OFF, MIDDLE_C + evt.bit.NUM, 0x00);
 	}
 
 	trellis.show();
-
-//	Serial.println(evt.bit.NUM);
 	return 0;
 }
 
 void setup() {
-	// put your setup code here, to run once:
-//	Serial.begin(9600);
-  Serial.begin(31250);
-	//while(!Serial);
+
+	// MIDI.begin(MIDI_CHANNEL_OMNI);
+	Serial.begin(31250);
+
+	// pinMode(INT_PIN, INPUT);
 
 	if(!trellis.begin()){
 		Serial.println("failed to begin trellis");
@@ -80,7 +75,7 @@ void setup() {
 	for(int i=0; i < Y_DIM*X_DIM; i++){
 	  trellis.setPixelColor(i, Wheel(map(i, 0, X_DIM*Y_DIM, 0, 255))); //addressed with keynum
 	  trellis.show();
-	  delay(50);
+	  delay(25);
 	}
 
 	for(int y=0; y < Y_DIM; y++){
@@ -91,7 +86,7 @@ void setup() {
 		  trellis.registerCallback(x, y, keyPress);
 		  trellis.setPixelColor(x, y, 0x000000); //addressed with x,y
 		  trellis.show(); //show all LEDs
-		  delay(50);
+		  delay(25);
 		}
 	}
 }
@@ -99,5 +94,5 @@ void setup() {
 void loop() {
 	// put your main code here, to run repeatedly:
 	trellis.read();
-	delay(20);
+	delay(2);
 }
