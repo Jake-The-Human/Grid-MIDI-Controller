@@ -28,15 +28,16 @@ public:
 
 	bool GoDownAnOct() { 
 		bool result{ false };
-		if((mKey - NOTES_IN_OCT) >= C_MINUS_1 and
-		   (mKey - NOTES_IN_OCT) <= B8){
+		if((mKey - NOTES_IN_OCT) >= C_MINUS_1 and (mKey - NOTES_IN_OCT) <= B8){
 			mKey -= NOTES_IN_OCT;
 			result = true;
 		}
 		return result;
 	}
 
-	inline byte XToNote(byte index, int x_dim) const { return (mKey + mScale[index % x_dim]) + ((index / x_dim ) * NOTES_IN_OCT); }
+	inline byte XToNote(byte index, int x_dim) const { 
+		return (mKey + mScale[index % x_dim]) + ((index / x_dim ) * NOTES_IN_OCT); 
+	}
 
 	inline byte GetRoot() const { return mKey; }
 	inline byte Get2nd() const  { return mKey + mScale[1]; }
