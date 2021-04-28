@@ -21,9 +21,6 @@ void updateRightEncoder() {
 class Encoder
 {
 public:
-	Encoder() = default;
-	~Encoder() = default;
-
 	void begin() {
 		pinMode(ENCODER_PIN_1, INPUT);
 		pinMode(ENCODER_PIN_2, INPUT);

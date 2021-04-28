@@ -1,3 +1,9 @@
+#include <Adafruit_GFX.h>
+#include <Adafruit_GrayOLED.h>
+#include <Adafruit_SPITFT.h>
+#include <Adafruit_SPITFT_Macros.h>
+#include <gfxfont.h>
+
 #ifndef _SCREEN_H
 #define _SCREEN_H
 
@@ -16,7 +22,12 @@ class Screen
 {
 public:
 	Screen(uint8_t w, uint8_t h) : display(w, h, &Wire, OLED_RESET) {}
+  
+  Screen(const Screen&) = default;
+  Screen(Screen&&) = default;
+
 	~Screen() = default;
+
 	void begin() {
 		// SSD1306_SWITCHCAPVCC = generate display voltage from 3.3V internally
 		if(not display.begin(SSD1306_SWITCHCAPVCC, 0x3D)) { // Address 0x3D for 128x64

@@ -8,8 +8,11 @@
 class Test
 {
 public:
-	Test(Grid& trellis, bool justTest = false) :
-		fTrellis(trellis), fJustTest(justTest) {}
+	Test(Grid& trellis, bool justTest = false) : fTrellis(trellis), fJustTest(justTest) {}
+
+  Test(const Test&) = default;
+  Test(Test&&) = default;
+
 	~Test() = default;
 	
 	void Run() {
@@ -19,7 +22,7 @@ public:
 		  fTrellis.show();
 		}
 
-		Scale s(C4, MAJOR_SCALE);
+		Scale s(C4, (byte*)MAJOR_SCALE);
 		
 		{ // INVERVAL TESTS
 			// index 0
@@ -80,10 +83,12 @@ public:
 private:
 	template<class T>
 	void TestHelper(T left, T right){
-		if(left == right)
+		if(left == right){
 			fTrellis.SetPadColor(fTestCount, GreenLED());
-		else
+    } else {
 			fTrellis.SetPadColor(fTestCount, RedLED());
+    }
+
 	 	fTestCount++;
 	}
 

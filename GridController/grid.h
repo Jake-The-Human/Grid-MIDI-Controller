@@ -45,6 +45,10 @@ class Grid
 {
 public:
 	Grid(Adafruit_NeoTrellis *trellis, uint8_t rows, uint8_t cols);
+
+  Grid(const Grid&) = default;
+  Grid(Grid&&) = default;
+
 	~Grid() = default;
 
 	void begin();

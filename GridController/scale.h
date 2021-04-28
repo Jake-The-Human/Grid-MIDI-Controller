@@ -22,6 +22,10 @@ class Scale
 {
 public:
 	Scale(byte key, byte* scale) : mKey(key), mScale(scale) {}
+  
+  Scale(const Scale&) = default;
+  Scale(Scale&&) = default;
+
 	~Scale() = default;
 
 	void ChangeKey(byte key) { mKey = key; }
@@ -85,8 +89,8 @@ private:
 	byte mKey;
 	byte* mScale;
 
-	short BinarySearchScale(byte* scale, byte searching, size_t size = NOTES_IN_SCALE) {
-		int l{0}, r{size -1};
+	short BinarySearchScale(byte* scale, byte searching, size_t size = NOTES_IN_SCALE) const {
+		int l = 0, r = size - 1;
 		while (l <= r)
 		{
 			const int mid{ l + (r - l) / 2 };

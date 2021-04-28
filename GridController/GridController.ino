@@ -30,7 +30,7 @@ Adafruit_NeoTrellis t_array[Y_DIM/4][X_DIM/4] = {
 // pass this matrix to the multitrellis object
 Grid GRID((Adafruit_NeoTrellis *)t_array, Y_DIM/4, X_DIM/4);
 MidiMess MIDI{};
-Scale CURRENT_SCALE(C2, MAJOR_SCALE);
+Scale CURRENT_SCALE(C2, (byte*)MAJOR_SCALE);
 Encoder knob{};
 
 ///////////////////////////////////////////////////
@@ -59,11 +59,11 @@ TrellisCallback chordModeCallback(keyEvent evt) {
 	MajorChord chord(rootNote, CURRENT_SCALE.GetKey());
 
 	if(evt.bit.EDGE == SEESAW_KEYPAD_EDGE_RISING){
-		MIDI.sendChordMessage(NOTE_ON, chord.GetChordNotes(), 0x45);
+		MIDI.sendChordMessage(NOTE_ON, (char*)chord.GetChordNotes(), 0x45);
 		chord.TrellisUpdate(GRID, true, evt.bit.NUM);
 	}
 	else if(evt.bit.EDGE == SEESAW_KEYPAD_EDGE_FALLING){
-		MIDI.sendChordMessage(NOTE_OFF, chord.GetChordNotes(), 0x00);
+		MIDI.sendChordMessage(NOTE_OFF, (char*)chord.GetChordNotes(), 0x00);
 		chord.TrellisUpdate(GRID, false, evt.bit.NUM);
 	}
 

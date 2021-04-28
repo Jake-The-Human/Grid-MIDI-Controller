@@ -18,6 +18,10 @@ class Chord
 public:
 	Chord(byte root, const Scale& scale) : mRoot(root), mScale(scale) {}
 	Chord(byte root, byte scaleKey, byte* scale) : mRoot(root), mScale(scaleKey, scale) {}
+
+  Chord(const Chord&) = default;
+  Chord(Chord&&) = default;
+
 	virtual ~Chord() = default;
 
 	inline byte GetRoot() const { return mRoot; }
@@ -53,7 +57,11 @@ class MajorChord : public Chord
 {
 public:
 	MajorChord(byte root, const Scale& scale) : Chord(root, scale) {}
-	MajorChord(byte root, byte scaleKey) : Chord(root, scaleKey, MAJOR_SCALE) {}
+	MajorChord(byte root, byte scaleKey) : Chord(root, scaleKey, (byte*)MAJOR_SCALE) {}
+
+  MajorChord(const MajorChord&) = default;
+  MajorChord(MajorChord&&) = default;
+
 	~MajorChord() = default;
 
 	byte Get3rd() const {return mRoot + mScale.GetIntervalOffset(3); }
@@ -73,7 +81,11 @@ class MinorChord : public Chord
 {
 public:
 	MinorChord(byte root, const Scale& scale) : Chord(root, scale) {}
-	MinorChord(byte root, byte scaleKey) : Chord(root, scaleKey, MINOR_SCALE) {}
+	MinorChord(byte root, byte scaleKey) : Chord(root, scaleKey, (byte*)MINOR_SCALE) {}
+
+  MinorChord(const MinorChord&) = default;
+  MinorChord(MinorChord&&) = default;
+
 	~MinorChord() = default;
 
 	byte Get3rd() const {return mRoot + mScale.GetIntervalOffset(3); }
@@ -93,7 +105,11 @@ class PowerChord : public Chord
 {
 public:
 	PowerChord(byte root, const Scale& scale) : Chord(root, scale) {}
-	PowerChord(byte root, byte scaleKey) : Chord(root, scaleKey, MAJOR_SCALE) {}
+	PowerChord(byte root, byte scaleKey) : Chord(root, scaleKey, (byte*)MAJOR_SCALE) {}
+
+  PowerChord(const PowerChord&) = default;
+  PowerChord(PowerChord&&) = default;
+
 	~PowerChord() = default;
 
 	byte Get5th() const {return mRoot + mScale.GetIntervalOffset(5); }

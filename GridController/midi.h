@@ -17,6 +17,10 @@
 class MidiMess{
 public:
 	MidiMess();
+  
+  MidiMess(const MidiMess&) = default;
+  MidiMess(MidiMess&&) = default;
+  
 	~MidiMess() = default;
 
 	void sendMIDIMessage(int cmd, int pitch, int velocity);

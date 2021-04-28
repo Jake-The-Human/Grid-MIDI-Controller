@@ -255,7 +255,7 @@ void Grid::ChangeDisplayMode(const Scale& scale)
 
 Scale Config::ChangeKey(byte index, int currentOctive)
 {
-	return { Config::indexToNote(index, currentOctive), MAJOR_SCALE };//{ newRoot + (currentOctive * 12), scaleType };
+	return Scale( Config::indexToNote(index, currentOctive), (byte*)MAJOR_SCALE );//{ newRoot + (currentOctive * 12), scaleType };
 }
 
 byte Config::indexToNote(byte index, int currentOctave) {
@@ -310,7 +310,7 @@ byte Config::indexToNote(byte index, int currentOctave) {
 
 byte Config::NoteToIndex(byte note, int currentOctive) {
 	byte index{ 8 };
-	byte tempNote{ note - (currentOctive * 12)};
+	byte tempNote =  note - (currentOctive * 12);
 
 	switch (tempNote) {
 		case 0x0C:
